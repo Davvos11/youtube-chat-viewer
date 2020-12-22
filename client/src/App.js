@@ -2,11 +2,15 @@ import './App.css';
 import React, { Component } from 'react';
 import {Button, Container} from "react-bootstrap";
 import {Socket} from "./api/socket";
+import {MessageComponent} from "./Message";
 
 class App extends Component {
     constructor(props) {
         super(props);
 
+        /**
+         * @type {{messages: [Message], socket: Socket}}
+         */
         this.state = {
             socket: null,
             messages: []
@@ -30,9 +34,14 @@ class App extends Component {
     }
 
     render() {
-        return <Container>
-            <Button onClick={this.loadSocket}>Test</Button>
-        </Container>
+        return <div>
+            {this.state.messages.map((value, index) => {
+                return <MessageComponent key={index}
+                                         authorName={value.author_name}
+                                         authorIcon={value.author_icon}
+                                         message={value.message}/>
+            })}
+        </div>
     }
 
     componentDidMount() {
