@@ -83,7 +83,7 @@ class Chat {
                 res.data.items.forEach(item => {
                     messages.push(new Message(
                         item.authorDetails.displayName,
-                        new URL(item.authorDetails.channelUrl),
+                        new URL(item.authorDetails.profileImageUrl),
                         item.snippet.displayMessage, //TODO check if is correct,
                         new Date(item.snippet.publishedAt).getTime()
                     ))
