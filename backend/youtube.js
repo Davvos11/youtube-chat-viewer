@@ -84,7 +84,8 @@ class Chat {
                     messages.push(new Message(
                         item.authorDetails.displayName,
                         new URL(item.authorDetails.channelUrl),
-                        item.snippet.displayMessage //TODO check if is correct
+                        item.snippet.displayMessage, //TODO check if is correct,
+                        new Date(item.snippet.publishedAt).getTime()
                     ))
                 })
 
@@ -103,11 +104,13 @@ class Message {
      * @param author_name {string}
      * @param author_icon {URL}
      * @param message {string}
+     * @param timestamp {number}
      */
-    constructor(author_name, author_icon, message) {
+    constructor(author_name, author_icon, message, timestamp) {
         this.author_name = author_name
         this.author_icon = author_icon
         this.message = message
+        this.timestamp = timestamp
     }
 }
 

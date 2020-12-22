@@ -29,7 +29,9 @@ class App extends Component {
      */
     onMessages = (messages) => {
         messages.forEach(message => {
-            this.setState({messages: [...this.state.messages, message]})
+            const newList = [...this.state.messages, message]
+            newList.sort(((a, b) => (a.timestamp > b.timestamp) ? 1 : -1))
+            this.setState({messages: newList})
         })
     }
 
