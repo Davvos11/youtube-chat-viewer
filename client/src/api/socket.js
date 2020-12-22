@@ -3,8 +3,9 @@ import io from "socket.io-client/dist/socket.io"
 export class Socket {
     /**
      * @param chatIds {[string]}
+     * @param onMessages {function([Message]): void}
      */
-    constructor(chatIds) {
+    constructor(chatIds, onMessages) {
         // Connect to the websocket
         this.socket = io()
 
@@ -13,8 +14,8 @@ export class Socket {
         this.chatIds.forEach((value => this.subscribeToChat(value)))
 
         // Listen for messages
-        this.socket.on('chat message', (message) => {
-            console.log(message)
+        this.socket.on('chat messages', (messages) => {
+            onMessages(messages)
         })
     }
 

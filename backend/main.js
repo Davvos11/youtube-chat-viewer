@@ -20,9 +20,7 @@ io.on('connection', /**@param socket {Socket}*/(socket) => {
     socket.on('subscribe', (chatId) => {
         console.log(`Subscribing to ${chatId}`)
         const chat = new Chat(chatId, (messages => {
-            messages.forEach(message => {
-                socket.emit('chat message', message)
-            })
+            socket.emit('chat messages', messages)
         }))
 
         chat.start()
