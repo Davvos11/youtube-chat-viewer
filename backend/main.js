@@ -1,9 +1,12 @@
 const app = require("./express");
 const Chat = require("./youtube");
+const ChatCache = require("./cache");
 const http = require("http").createServer(app)
 const io = require("socket.io")(http)
 
 const PORT = 8000
+
+const cache = new ChatCache()
 
 io.on('connection', /**@param socket {Socket}*/(socket) => {
     console.log('Client connected')
@@ -13,17 +16,16 @@ io.on('connection', /**@param socket {Socket}*/(socket) => {
     socket.on('disconnect', () => {
         console.log('Client disconnected')
         chats.forEach((chat) => {
-            chat.disable()
+            cache.unsubscribeChat(chat.chatId)
         })
     })
 
     socket.on('subscribe', (chatId) => {
         console.log(`Subscribing to ${chatId}`)
-        const chat = new Chat(chatId, (messages => {
+        const chat = cache.getChat(chatId, (messages => {
             socket.emit('chat messages', messages)
         }))
 
-        chat.start()
         chats.push(chat)
     })
 })

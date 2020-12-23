@@ -7,6 +7,7 @@ const {google} = require('googleapis');
 const readFile = util.promisify(fs.readFile);
 
 const SECRET_FILE = path.join(path.dirname('.'), 'api.txt');
+const POLLING_INTERVAL = 60000
 
 /**
  * @returns {Promise<google.youtube>}
@@ -35,9 +36,11 @@ class Chat {
     constructor(chatId, onMessages) {
         this.chatId = chatId
         this.pageToken = undefined
-        this.onMessages = onMessages
+        this.onMessagesFunctions = [onMessages]
         this.disabled = false
         this.youtube = undefined
+        /** @type {[Message]} */
+        this.messages = []
     }
 
     async getYoutube() {
@@ -51,7 +54,15 @@ class Chat {
         this.disabled = true
     }
 
+    /**
+     * @param onMessages {function([Message]): void}
+     */
+    addOnMessages(onMessages) {
+        this.onMessagesFunctions.push(onMessages)
+    }
+
     start() {
+        this.disabled = false
         this.requestMessages().then()
     }
 
@@ -72,11 +83,13 @@ class Chat {
         // get the chat messages
         (await this.getYoutube()).liveChatMessages.list(params)
             .then(res => {
+                console.log('youtube')
                 // Save the "next page token" so next time we will only get new messages
                 this.pageToken = res.data.nextPageToken
 
-                // Set a timer to get new messages (according to the time specified by the api)
-                setTimeout(this.requestMessages, res.data.pollingIntervalMillis)
+                // Set a timer to get new messages (according to the time specified by the api, or user set time)
+                const nextRequest = Math.max(res.data.pollingIntervalMillis, POLLING_INTERVAL)
+                setTimeout(this.requestMessages, nextRequest)
 
                 const messages = []
                 // Extract information of each new message
@@ -90,7 +103,11 @@ class Chat {
                 })
 
                 // Call callback for new messages
-                this.onMessages(messages)
+                this.onMessagesFunctions.forEach(fun => {
+                    fun(messages)
+                })
+                // Save messages
+                this.messages = [...this.messages, ...messages]
             })
             .catch(error => {
                 console.error("Could not connect to chat");
