@@ -1,0 +1,22 @@
+.message {
+    width: 100%;
+    background-color: rgba(00, 00, 00, 0.4);
+    margin: 10px 0 0;
+    padding: 10px 0;
+}
+
+.message > div{
+    display: flex;
+    align-items: center;
+    font-size: 25px;
+    color: white;
+}
+
+.container {
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0;
+}

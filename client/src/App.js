@@ -1,8 +1,9 @@
 import './App.css';
 import React, { Component } from 'react';
-import {Button, Container} from "react-bootstrap";
+import {Col} from "react-bootstrap";
 import {Socket} from "./api/socket";
 import {MessageComponent} from "./Message";
+import style from "./message.module.css"
 
 class App extends Component {
     constructor(props) {
@@ -36,14 +37,14 @@ class App extends Component {
     }
 
     render() {
-        return <div>
+        return <Col className={style.container}>
             {this.state.messages.map((value, index) => {
                 return <MessageComponent key={index}
                                          authorName={value.author_name}
                                          authorIcon={value.author_icon}
                                          message={value.message}/>
             })}
-        </div>
+        </Col>
     }
 
     componentDidMount() {
