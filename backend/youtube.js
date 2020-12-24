@@ -7,7 +7,7 @@ const {google} = require('googleapis');
 const readFile = util.promisify(fs.readFile);
 
 const SECRET_FILE = path.join(path.dirname('.'), 'api.txt');
-const POLLING_INTERVAL = 60000
+const POLLING_INTERVAL = 6000
 
 /**
  * @returns {Promise<google.youtube>}
