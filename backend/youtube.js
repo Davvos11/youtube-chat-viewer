@@ -83,7 +83,6 @@ class Chat {
         // get the chat messages
         (await this.getYoutube()).liveChatMessages.list(params)
             .then(res => {
-                console.log('youtube')
                 // Save the "next page token" so next time we will only get new messages
                 this.pageToken = res.data.nextPageToken
 
@@ -97,7 +96,7 @@ class Chat {
                     messages.push(new Message(
                         item.authorDetails.displayName,
                         new URL(item.authorDetails.profileImageUrl),
-                        item.snippet.displayMessage, //TODO check if is correct,
+                        item.snippet.displayMessage,
                         new Date(item.snippet.publishedAt).getTime()
                     ))
                 })
@@ -110,8 +109,8 @@ class Chat {
                 this.messages = [...this.messages, ...messages]
             })
             .catch(error => {
-                console.error("Could not connect to chat");
-                this.disable()
+                console.error(`Could not connect to chat: ${error}`);
+                setTimeout(this.requestMessages, 1.5*POLLING_INTERVAL)
             });
     }
 }
