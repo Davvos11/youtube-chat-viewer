@@ -1,4 +1,4 @@
-const Chat = require("./youtube");
+const {Chat} = require("./youtube");
 
 class ChatCache {
     constructor() {

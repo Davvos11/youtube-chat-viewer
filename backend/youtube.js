@@ -131,4 +131,5 @@ class Message {
     }
 }
 
-module.exports = Chat
+module.exports.Chat = Chat
+module.exports.Message = Message
