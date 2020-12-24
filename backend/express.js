@@ -10,6 +10,6 @@ app.use(cors())
 app.use(bodyParser.json())
 
 // Serve the static files from the React app
-app.use(express.static(path.join(path.dirname('..'), 'client/build')));
+app.use(express.static('../client/build'));
 
 module.exports = app
