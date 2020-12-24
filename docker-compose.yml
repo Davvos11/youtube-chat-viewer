@@ -1,0 +1,9 @@
+---
+version: "3"
+services:
+  beugelcompetitie:
+    image: davvos11/youtube-chat
+    container_name: youtube-chat
+    restart: unless-stopped
+    ports:
+      - 8000:8000
