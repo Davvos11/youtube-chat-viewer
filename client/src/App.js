@@ -4,24 +4,26 @@ import {Col} from "react-bootstrap";
 import {Socket} from "./api/socket";
 import {MessageComponent} from "./Message";
 import style from "./message.module.css"
+import urlParse from 'url-parse'
 
 class App extends Component {
     constructor(props) {
         super(props);
 
         /**
-         * @type {{messages: [Message], socket: Socket}}
+         * @type {{messages: [Message], socket: Socket, duration: number}}
          */
         this.state = {
             socket: null,
-            messages: []
+            messages: [],
+            duration: 10000,
         }
     }
 
-    loadSocket = () => {
-        // IDs can be specified in the url, separated by /
-        let chatIds = window.location.pathname.split('/')
-        chatIds = chatIds.filter(value => value !== "")
+    /**
+     * @param chatIds {[string]}
+     */
+    loadSocket = (chatIds) => {
         this.setState({socket: new Socket(chatIds, this.onMessages)})
     }
 
@@ -44,15 +46,24 @@ class App extends Component {
                     return <MessageComponent key={index}
                                              authorName={value.author_name}
                                              authorIcon={value.author_icon}
-                                             message={value.message}/>
+                                             message={value.message}
+                                             duration={this.duration}/>
                 })}
             </Col>
             <div className={style.bottom} ref={(el) => {this.bottom = el}}/>
         </>
     }
 
-    componentDidMount() {
-        this.loadSocket()
+    componentDidMount() {// IDs can be specified in the url,
+        // Parse url
+        const parser = new urlParse(window.location.href, true)
+        // Get chat IDs
+        let chatIds = parser.query['ids'].split(',')
+        chatIds = chatIds.filter(value => value !== "")
+        // Get display duration
+        this.duration = Number(parser.query['duration'])
+
+        this.loadSocket(chatIds)
         this.bottom.scrollIntoView({behavior: "smooth"})
     }
 

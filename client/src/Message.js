@@ -7,7 +7,8 @@ export class MessageComponent extends Component {
     static propTypes = {
         authorName: PropTypes.string.isRequired,
         authorIcon: PropTypes.instanceOf(URL).isRequired,
-        message: PropTypes.string.isRequired
+        message: PropTypes.string.isRequired,
+        duration: PropTypes.number.isRequired
     }
 
     constructor(props) {
@@ -30,8 +31,10 @@ export class MessageComponent extends Component {
     }
 
     componentDidMount() {
-        setTimeout(() => {
-            this.setState({showClass: style.messageHidden})
-        }, 10000)
+        if (this.props.duration > 0) {
+            setTimeout(() => {
+                this.setState({showClass: style.messageHidden})
+            }, this.props.duration)
+        }
     }
 }
