@@ -8,6 +8,7 @@ export class MessageComponent extends Component {
         authorName: PropTypes.string.isRequired,
         authorIcon: PropTypes.instanceOf(URL).isRequired,
         message: PropTypes.string.isRequired,
+        timestamp: PropTypes.number.isRequired,
         duration: PropTypes.number.isRequired
     }
 
@@ -32,6 +33,11 @@ export class MessageComponent extends Component {
 
     componentDidMount() {
         if (this.props.duration > 0) {
+            // Don't show messages that should have already been hidden (this only applies on page refresh)
+            if (Date.now() - this.props.timestamp > this.props.duration) {
+                this.setState({showClass: style.messageDisabled})
+            }
+
             setTimeout(() => {
                 this.setState({showClass: style.messageHidden})
             }, this.props.duration)

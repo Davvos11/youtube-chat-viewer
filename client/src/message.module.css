@@ -21,6 +21,10 @@
     opacity: 0;
 }
 
+.messageDisabled {
+    display: none;
+}
+
 .container {
     display: flex;
     flex-direction: column;

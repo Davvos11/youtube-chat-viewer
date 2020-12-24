@@ -47,6 +47,7 @@ class App extends Component {
                                              authorName={value.author_name}
                                              authorIcon={value.author_icon}
                                              message={value.message}
+                                             timestamp={value.timestamp}
                                              duration={this.duration}/>
                 })}
             </Col>
