@@ -37,19 +37,29 @@ class App extends Component {
     }
 
     render() {
-        return <Col className={style.container}>
-            {this.state.messages.map((value, index) => {
-                return <MessageComponent key={index}
-                                         authorName={value.author_name}
-                                         authorIcon={value.author_icon}
-                                         message={value.message}/>
-            })}
-        </Col>
+        return <>
+            <div className={style.top} />
+            <Col className={style.container}>
+                {this.state.messages.map((value, index) => {
+                    return <MessageComponent key={index}
+                                             authorName={value.author_name}
+                                             authorIcon={value.author_icon}
+                                             message={value.message}/>
+                })}
+            </Col>
+            <div className={style.bottom} ref={(el) => {this.bottom = el}}/>
+        </>
     }
 
     componentDidMount() {
         this.loadSocket()
+        this.bottom.scrollIntoView({behavior: "smooth"})
     }
+
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        this.bottom.scrollIntoView({behavior: "smooth"})
+    }
+
 }
 
 export default App;

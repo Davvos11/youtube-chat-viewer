@@ -10,9 +10,16 @@ export class MessageComponent extends Component {
         message: PropTypes.string.isRequired
     }
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            showClass: style.messageShown
+        }
+    }
+
     render() {
-        console.debug(this.props.authorIcon)
-        return <Row className={style.message}>
+        return <Row className={`${style.message} ${this.state.showClass}`}>
             <Col xs="auto">
                 <Image roundedCircle style={{height: "50px"}} src={this.props.authorIcon}/>
             </Col>
@@ -20,5 +27,11 @@ export class MessageComponent extends Component {
                 <span><b>{this.props.authorName}:</b> {this.props.message}</span>
             </Col>
         </Row>
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.setState({showClass: style.messageHidden})
+        }, 10000)
     }
 }
